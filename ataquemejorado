@@ -11,9 +11,9 @@ import time
 # Función para atacar monstruos
 def kill_monster():
     # Inicializar tiempos de reutilización para cada tecla
-    last_f1_time = time.time() - 6  # F1 tiene 6 segundos de reutilización
-    last_f2_time = time.time() - 4  # F2 tiene 4 segundos de reutilización
-    last_f3_time = time.time() - 6  # F3 tiene 6 segundos de reutilización
+    last_f2_time = time.time() - 6  # F2 tiene 6 segundos de reutilización
+    last_f5_time = time.time() - 8  # F5 tiene 8 segundos de reutilización
+    last_f7_time = time.time() - 6  # F7 tiene 6 segundos de reutilización
     
     used_f1 = False  # Bandera para saber si ya usamos F1
     
@@ -33,26 +33,32 @@ def kill_monster():
             
             current_time = time.time()  # Obtener el tiempo actual
 
-            # Comienza con F1 si no se ha usado
-            if not used_f1 and current_time - last_f1_time >= 6:
-                pg.press("f1")
-                print("Presionando F1")
-                last_f1_time = current_time  # Actualizar el último tiempo en que se presionó F1
-                used_f1 = True  # Marcar que F1 ya fue usada
+            # Comienza con F2 si no se ha usado
+            if not used_f2 and current_time - last_f2_time >= 6:
+                pg.press("f2")
+                print("Presionando F2")
+                last_f2_time = current_time  # Actualizar el último tiempo en que se presionó F2
+                used_f2 = True  # Marcar que F2 ya fue usada
 
-            # Si F1 ya se usó, priorizar F2 y F3
+            # Si F2 ya se usó, priorizar F5 y F7
             else:
-                # Gestionar reutilización de F2 (4 segundos de reutilización)
-                if current_time - last_f2_time >= 4:
-                    pg.press("f2")
-                    print("Presionando F2")
-                    last_f2_time = current_time  # Actualizar el último tiempo en que se presionó F2
+                # Gestionar reutilización de F5 (8 segundos de reutilización)
+                if current_time - last_f5_time >= 8:
+                    pg.press("f5")
+                    print("Presionando F5")
+                    last_f5_time = current_time  # Actualizar el último tiempo en que se presionó F5
 
-                # Gestionar reutilización de F3 (6 segundos de reutilización)
+                    # Pausa de 2 segundos antes de permitir la siguiente acción (F5)
+                    time.sleep(2)
+
+                # Gestionar reutilización de F7 (6 segundos de reutilización)
                 if current_time - last_f3_time >= 6:
-                    pg.press("f3")
-                    print("Presionando F3")
-                    last_f3_time = current_time  # Actualizar el último tiempo en que se presionó F3
+                    pg.press("f7")
+                    print("Presionando F7")
+                    last_f7_time = current_time  # Actualizar el último tiempo en que se presionó F7
+
+                    # Pausa de 2 segundos antes de permitir la siguiente acción (F7)
+                    time.sleep(2)
 
             # Añadir una pequeña pausa para no saturar la CPU
             time.sleep(0.1)
@@ -141,3 +147,4 @@ group_thread = my_thread.ThreadGroup([th_full_mana, th_check_life])
 # Listener para las teclas
 with keyboard.Listener(on_press=lambda key: key_code(key, group_thread)) as listener:
     listener.join()
+
